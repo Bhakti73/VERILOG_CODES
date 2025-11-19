@@ -1,0 +1,13 @@
+`timescale 1ns / 1ps
+
+module half_subtractor(
+    input A,
+    input B,
+    output DIFF,
+    output BORROW
+);
+
+    assign DIFF   = A ^ B;
+    assign BORROW = (~A) & B;
+
+endmodule

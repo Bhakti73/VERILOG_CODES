@@ -1,24 +1,33 @@
-`timescale 1ns / 1ps
+`timescale 1ns/1ps
 
-module tb_bool_expr(
+module tb;
 
-);
-reg a,b,c,d;
-wire y;
+    reg a, b, c, d;
+    wire y;
 
-bool_expr uut(.a(a),.b(b),.c(c),.d(d),.y(y));
+    bool_expr uut (
+        .a(a),
+        .b(b),
+        .c(c),
+        .d(d),
+        .y(y)
+    );
 
-integer i;
-initial begin
- 
-  for(i=0;i<16;i=i+1) begin
-    // Assign 4-bit integer i to the 4 input registers {a,b,c,d}
-    {a,b,c,d} = i;
-    #10; 
-    $display("%d | %b %b %b %b | %b", i, a, b, c, d, y); 
-    #10;
-  end
-  
-  $finish;
-end
+    initial begin
+        $dumpfile("wave.vcd");
+        $dumpvars(0, tb);
+
+        $monitor("Time=%0t | a=%b b=%b c=%b d=%b | y=%b",
+                 $time, a, b, c, d, y);
+
+        a=0; b=0; c=0; d=0; #10
+        a=0; b=1; c=1; d=0; #10
+        a=1; b=1; c=0; d=1; #10
+        a=1; b=0; c=1; d=1; #10
+        a=1; b=1; c=1; d=0; #10
+        a=0; b=0; c=1; d=1; #10
+
+        $finish;
+    end
+
 endmodule

@@ -1,0 +1,33 @@
+`timescale 1ns/1ps
+
+module tb();
+
+reg clk, reset;
+wire [2:0] out;
+
+seq_counter uut(clk, reset, out);
+
+// clock
+initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+end
+
+// waveforms
+initial begin
+    $dumpfile("seq_counter.vcd");
+    $dumpvars(0, tb);
+end
+
+// inputs
+initial begin
+    $monitor("t=%0t  reset=%b  out=%b", $time, reset, out);
+
+    reset = 1; #10;
+    reset = 0;
+
+    #80;
+    $finish;
+end
+
+endmodule

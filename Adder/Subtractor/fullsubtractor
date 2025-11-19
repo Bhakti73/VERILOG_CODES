@@ -1,0 +1,14 @@
+`timescale 1ns / 1ps
+
+module full_subtractor(
+    input  A,
+    input  B,
+    input  Bin,
+    output DIFF,
+    output BORROW
+);
+
+    assign DIFF   = A ^ B ^ Bin;
+    assign BORROW = (~A & B) | (~A & Bin) | (B & Bin);
+
+endmodule

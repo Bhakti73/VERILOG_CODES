@@ -1,39 +1,32 @@
-`timescale 1ns / 1ps
+`timescale 1ns/1ps
 
-module tb_mux();
+module tb;
 
-reg a,b,sel;
-wire y;
+    reg a, b, sel;
+    wire y;
 
-// Instantiate the Unit Under Test (UUT)
-mux uut(a,b,sel,y);
+    mux uut (
+        .a(a),
+        .b(b),
+        .sel(sel),
+        .y(y)
+    );
 
-initial begin
-    
-    $display("Time | a | b | sel | y (a=0/sel=0:b=1)");
-    $monitor("%4d | %b | %b | %b | %b", $time, a, b, sel, y);
+    initial begin
+        $dumpfile("wave.vcd");
+        $dumpvars(0, tb);
 
-    // Test Case 1: sel=0 (y should follow a)
-    a=0;b=0;sel=0;
-    #10
-    a=0;b=1;sel=0;
-    #10
-    a=1;b=0;sel=0;
-    #10
-    a=1;b=1;sel=0;
-    #10
+        $monitor("Time=%0t | a=%b b=%b sel=%b | y=%b",
+                 $time, a, b, sel, y);
 
-    // Test Case 2: sel=1 (y should follow b)
-    a=0;b=0;sel=1;
-    #10
-    a=0;b=1;sel=1;
-    #10
-    a=1;b=0;sel=1;
-    #10
-    a=1;b=1;sel=1;
-    #10
+        a=0; b=1; sel=0; #10
+        a=0; b=1; sel=1; #10
+        a=1; b=0; sel=0; #10
+        a=1; b=0; sel=1; #10
+        a=1; b=1; sel=0; #10
+        a=1; b=1; sel=1; #10
 
-    $finish;
-end
+        $finish;
+    end
 
 endmodule
